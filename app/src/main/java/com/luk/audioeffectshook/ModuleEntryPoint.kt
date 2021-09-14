@@ -8,11 +8,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 
 class ModuleEntryPoint : IXposedHookLoadPackage {
-    private fun ByteArray.toHexArray(): String =
-        joinToString(", ") { eachByte -> "0x%02x".format(eachByte) }
-
-    private fun ShortArray.toHexArray(): String =
-        joinToString(", ") { eachByte -> "0x%02x".format(eachByte) }
+    private fun ByteArray.toHexString(): String = joinToString("") { "%02x".format(it) }
+    private fun ShortArray.toHexString(): String = joinToString("") { "%02x".format(it) }
 
     fun logParams(msg: String, param: XC_MethodHook.MethodHookParam) {
         Log.e(TAG, msg)
@@ -20,10 +17,10 @@ class ModuleEntryPoint : IXposedHookLoadPackage {
         param.args.forEachIndexed { k, v ->
             when (v) {
                 is ByteArray -> {
-                    Log.e(TAG, "    key=$k, v=[${v.toHexArray()}]")
+                    Log.e(TAG, "    key=$k, v=${v.toHexString()}")
                 }
                 is ShortArray -> {
-                    Log.e(TAG, "    key=$k, v=[${v.toHexArray()}]")
+                    Log.e(TAG, "    key=$k, v=${v.toHexString()}")
                 }
                 else -> {
                     Log.e(TAG, "    key=$k, v=$v")
